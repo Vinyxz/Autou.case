@@ -1,0 +1,30 @@
+services:
+  # Serviço do Frontend (Nginx)
+  frontend:
+    image: nginx:latest
+    container_name: autou-frontend
+    ports:
+      # Expõe a porta 80 do Nginx para a porta 8080 na sua máquina
+      - "8080:80"
+    volumes:
+      # Mapeia a sua pasta 'app/frontend' para a pasta de conteúdo web do Nginx
+      - ./app/frontend:/usr/share/nginx/html
+    depends_on:
+      - backend
+    restart: always
+
+  # Serviço do Backend (Python)
+  backend:
+    container_name: autou-backend
+    # Constrói a imagem a partir do Dockerfile na pasta 'app/backend'
+    build: 
+      context: ./app/backend
+      dockerfile: Dockerfile
+    # Carrega as variáveis de ambiente (API KEY) do ficheiro .env
+    env_file:
+      - ./app/backend/.env
+    ports:
+      # CORREÇÃO AQUI: Mapeia a porta 5001 da sua máquina para a porta 5001 do contentor
+      - "5001:5001"
+    restart: always
+
