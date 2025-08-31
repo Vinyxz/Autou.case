@@ -6,7 +6,7 @@ from PyPDF2 import PdfReader
 from io import BytesIO
 from typing import Dict
 
-# --- CORREÇÃO AQUI: O nome da variável está agora 100% correto ---
+
 API_TOKEN = os.getenv("HUGGINGFACE_API_TOKEN")
 
 API_URL = "https://api-inference.huggingface.co/models/facebook/bart-large-mnli"
@@ -14,7 +14,7 @@ HEADERS = {"Authorization": f"Bearer {API_TOKEN}"}
 
 app = FastAPI()
 
-# Permite a comunicação com o frontend
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -53,17 +53,7 @@ def generate_response(classification: Dict) -> str:
     if top_label == "requer ação urgente":
         return "Obrigado pelo seu e-mail. A sua mensagem foi recebida e será encaminhada para a equipa responsável. Entraremos em contacto em breve."
     elif top_label == "não requer ação":
-        # Você pode escolher ou personalizar a resposta que preferir.
-        # Para usar uma das opções abaixo, remova o '#' da linha e adicione-o na linha da outra opção.
-        
-        # Opção 1 (Padrão - Um pouco mais completa)
-        return "Sua mensagem foi recebida com sucesso. Agradecemos o contato e, caso seja necessário, retornaremos em breve."
-        
-        # Opção 2 (Mais formal)
-        # return "Prezado(a), agradecemos o seu contato. Confirmamos o recebimento da sua mensagem."
-        
-        # Opção 3 (Mais amigável e curta)
-        # return "Olá! Recebemos a sua mensagem. Obrigado pelo contato!"
+        return "Sua mensagem foi recebida com sucesso. Agradecemos o contato e, caso seja necessário, retornaremos em breve."  
     else:
         return "Não foi possível determinar a categoria deste e-mail. A sua mensagem foi recebida."
 
@@ -106,4 +96,5 @@ async def process_email_endpoint(file: UploadFile = File(None), email_text: str 
 async def root():
     """Endpoint de verificação para confirmar que o backend está a funcionar."""
     return {"message": "Backend funcionando corretamente"}
+
 
