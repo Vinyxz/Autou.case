@@ -64,7 +64,7 @@ Pré-requisitos do Docker instalados e executados em sua máquina.
 
 Passos de Instalação Clone ou repositório:
 
-git clone https://github.com/Vinyxz/AutoU.AI.git cd autou.case
+git clone https://github.com/Vinyxz/Autou.case.git cd autou.case
 
 Chore o arquivo do ambiente:
 
