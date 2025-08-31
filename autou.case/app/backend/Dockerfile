@@ -1,20 +1,21 @@
-# Usar uma imagem base do Python
+
 FROM python:3.9-slim
 
-# Definir o diretório de trabalho no contêiner
+
 WORKDIR /app
 
-# Copiar o arquivo de dependências para o contêiner
-COPY app/backend/requirements.txt /app/requirements.txt
 
-# Instalar as dependências
-RUN pip install --no-cache-dir -r /app/requirements.txt
+COPY requirements.txt .
 
-# Copiar o código da aplicação para o contêiner
-COPY app/backend/ /app/
 
-# Expor a porta onde o backend estará rodando
-EXPOSE 5001
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Comando para rodar o Gunicorn com o Uvicorn
-CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:5001", "app:app"]
+
+COPY . .
+
+# --- A MUDANÇA MAIS IMPORTANTE ESTÁ AQUI ---
+# Em vez de um comando fixo, tornamo-lo flexível.
+# Ele irá usar a porta que a Render definir na variável de ambiente $PORT.
+# Se a variável $PORT não existir (como no seu PC), ele usará 5001 como padrão.
+CMD gunicorn -k uvicorn.workers.UvicornWorker -b 0.0.0.0:${PORT:-5001} app:app
+
